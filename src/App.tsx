@@ -1,9 +1,13 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, styled } from "styled-components";
 import { Helmet } from "react-helmet-async";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
 import { darkTheme } from "./theme";
-import ToDoList from "./components/ToDoList";
+import { ToDoList } from "./components/ToDoList";
+import { CategoryList } from "@/components/CategoryList";
+import { CategoryAdder } from "@/components/CategoryAdder";
+import { ToDoAdder } from "@/components/ToDoAdder";
+import { HorizontalDivider } from "@/components/HorizontalDivider";
 
 /* @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap'); */
 const GlobalStyle = createGlobalStyle`
@@ -77,22 +81,36 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+`;
+
 function App() {
-	return (
-		<>
-			<ThemeProvider theme={darkTheme}>
-				<Helmet>
-					<link
-						href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
-						rel="stylesheet"
-					/>
-				</Helmet>
-				<GlobalStyle />
-				<ToDoList />
-				<ReactQueryDevtools initialIsOpen={true} />
-			</ThemeProvider>
-		</>
-	);
+  return (
+    <>
+      <ThemeProvider theme={darkTheme}>
+        <Helmet>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
+            rel="stylesheet"
+          />
+        </Helmet>
+        <GlobalStyle />
+        <Main>
+          <CategoryList />
+          <HorizontalDivider />
+          <CategoryAdder />
+          <HorizontalDivider />
+          <ToDoAdder />
+          <HorizontalDivider />
+          <ToDoList />
+        </Main>
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
+    </>
+  );
 }
 
 export default App;

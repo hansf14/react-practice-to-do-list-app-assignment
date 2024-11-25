@@ -2,4 +2,3 @@
 2. local storage
 store todos state at the local storage
 load todos from default which is loaded from the local storage
-3. DnD to change the category

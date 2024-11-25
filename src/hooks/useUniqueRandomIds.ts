@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { generateUniqueRandomIds } from "@/utils";
+import { generateUniqueRandomIds } from "@/utils/generateUniqueRandomIds";
 import { useLikeConstructor } from "./useLikeConstructor";
 
 export function useUniqueRandomIds({ count }: { count: number }): {
