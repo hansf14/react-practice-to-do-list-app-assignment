@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/react-practice-to-do-list-app-assignment/static/js/main.94c084f9.js",
+    "main.js": "/react-practice-to-do-list-app-assignment/static/js/main.602945b3.js",
     "index.html": "/react-practice-to-do-list-app-assignment/index.html",
-    "main.94c084f9.js.map": "/react-practice-to-do-list-app-assignment/static/js/main.94c084f9.js.map"
+    "main.602945b3.js.map": "/react-practice-to-do-list-app-assignment/static/js/main.602945b3.js.map"
   },
   "entrypoints": [
-    "static/js/main.94c084f9.js"
+    "static/js/main.602945b3.js"
   ]
 }
