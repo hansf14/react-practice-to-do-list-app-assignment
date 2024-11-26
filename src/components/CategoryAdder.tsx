@@ -1,4 +1,4 @@
-import { atomCategories, atomToDos } from "@/atoms";
+import { atomFamilyCategories, atomFamilyToDos } from "@/atoms";
 import { ButtonPrimary } from "@/components/ButtonPrimary";
 import { useCallback, useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -43,8 +43,10 @@ const NewCategoryInput = styled.input`
 `;
 
 export function CategoryAdder() {
-  const [stateCategories, setStateCategories] = useRecoilState(atomCategories);
-  const setStateToDos = useSetRecoilState(atomToDos);
+  const [stateCategories, setStateCategories] = useRecoilState(
+    atomFamilyCategories(null),
+  );
+  const setStateToDos = useSetRecoilState(atomFamilyToDos(null));
 
   const {
     register,
@@ -73,7 +75,7 @@ export function CategoryAdder() {
       setStateCategories(categories);
 
       setStateToDos((cur) => {
-        return { ...cur, newCategoryText: [] };
+        return { ...cur, [newCategoryText]: [] };
       });
     },
     [reset, setStateCategories, setStateToDos, stateCategories],
@@ -94,9 +96,11 @@ export function CategoryAdder() {
         />
         <ButtonPrimary type="submit">Add</ButtonPrimary>
       </CategoryAdderContent>
-      <CategoryAdderErrorMessage>
-        {!!errors.categoryText?.message && errors.categoryText.message}
-      </CategoryAdderErrorMessage>
+      {!!errors.categoryText?.message && (
+        <CategoryAdderErrorMessage>
+          {errors.categoryText.message}
+        </CategoryAdderErrorMessage>
+      )}
     </CategoryAdderBase>
   );
 }

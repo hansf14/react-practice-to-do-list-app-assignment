@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
-  atomCategories,
+  atomFamilyCategories,
   atomToDoAdderCurrentCategory,
-  atomToDos,
+  atomFamilyToDos,
   ToDoData,
 } from "@/atoms";
 import { generateUniqueRandomId } from "@/utils";
@@ -25,7 +25,7 @@ const ToDoAdderBase = styled.form`
 `;
 
 const ToDoAdderCategorySelector = styled(Select)`
-  width: 180px;
+  width: 234px;
 `;
 
 const ToDoAdderTextInput = styled.textarea`
@@ -58,11 +58,12 @@ const ToDoAdderErrorMessage = styled.div`
 export function ToDoAdder() {
   const refToDoAdderCategorySelector = useRef<SelectHandle>(null);
 
-  const stateCategories = useRecoilValue(atomCategories);
-  const setStateToDos = useSetRecoilState(atomToDos);
+  const stateCategories = useRecoilValue(atomFamilyCategories(null));
+  const setStateToDos = useSetRecoilState(atomFamilyToDos(null));
   const [stateCurrentCategory, setStateCurrentCategory] = useRecoilState(
     atomToDoAdderCurrentCategory,
   );
+  // console.log(stateCurrentCategory);
 
   const {
     register,
@@ -109,6 +110,7 @@ export function ToDoAdder() {
   const selectCategoryHandler = useCallback<
     RequiredDeep<SelectProps>["customProps"]["selectProps"]["onChange"]
   >(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (value: string, option) => {
       setStateCurrentCategory(value);
     },
@@ -120,6 +122,7 @@ export function ToDoAdder() {
   );
 
   useEffect(() => {
+    console.log(refToDoAdderCategorySelector.current?.selectedValue);
     if (
       refToDoAdderCategorySelector.current?.selectedValue &&
       !pureCategories.includes(
@@ -140,6 +143,8 @@ export function ToDoAdder() {
           selectProps: {
             disabled: pureCategories.length === 0,
             placeholder: "Select a Category",
+            defaultValue: stateCurrentCategory,
+            value: stateCurrentCategory,
             options: pureCategories.map((pureCategory) => {
               return {
                 value: pureCategory,
@@ -174,9 +179,9 @@ export function ToDoAdder() {
       >
         Add
       </ButtonPrimary>
-      <ToDoAdderErrorMessage>
-        {!!errors.toDoText?.message && errors.toDoText.message}
-      </ToDoAdderErrorMessage>
+      {!!errors.toDoText?.message && (
+        <ToDoAdderErrorMessage>{errors.toDoText.message}</ToDoAdderErrorMessage>
+      )}
     </ToDoAdderBase>
   );
 }

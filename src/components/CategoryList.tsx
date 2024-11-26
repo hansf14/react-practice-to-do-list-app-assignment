@@ -1,5 +1,5 @@
 import { useRecoilValue } from "recoil";
-import { atomCategories } from "@/atoms";
+import { atomFamilyCategories } from "@/atoms";
 import { styled } from "styled-components";
 import { Category } from "@/components/Category";
 
@@ -22,7 +22,7 @@ const CategoryListContentBase = styled.ul`
 `;
 
 export function CategoryList() {
-  const stateCategories = useRecoilValue(atomCategories);
+  const stateCategories = useRecoilValue(atomFamilyCategories(null));
   // console.log(stateCategories);
 
   return (

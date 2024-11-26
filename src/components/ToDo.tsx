@@ -1,17 +1,20 @@
 import React, { useCallback, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  atomCategories,
+  atomFamilyCategories,
   selectorFamilyToDo,
+  selectorFamilyToDoList,
   ToDoCategoryType,
   ToDoData,
 } from "@/atoms";
 import { styled } from "styled-components";
 import { ButtonPrimary } from "@/components/ButtonPrimary";
+import { XCircle } from "react-bootstrap-icons";
 
 const ToDoBase = styled.li`
   display: flex;
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
   padding: 5px;
   background-color: aliceblue;
   flex-direction: column;
@@ -29,21 +32,32 @@ const ToDoText = styled.div`
   border-radius: 3px;
 `;
 
-const ChangeCategoryButtons = styled.div`
+const ButtonControls = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
+  align-items: center;
 `;
 
 const ChangeCategoryButton = styled(ButtonPrimary)``;
 
+const RemoveToDoButton = styled(XCircle)`
+  flex: 0 0 30px;
+  height: 25px;
+  cursor: pointer;
+`;
+
 export function ToDo(props: ToDoData) {
   const { id, category, text } = props;
-  const stateCategories = useRecoilValue(atomCategories);
+  const stateCategories = useRecoilValue(atomFamilyCategories(null));
   const [stateToDo, setStateToDo] = useRecoilState(
     selectorFamilyToDo({ id, category }),
   );
+  const [stateToDoList, setStateToDoList] = useRecoilState(
+    selectorFamilyToDoList(category),
+  );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [stateText, setStateText] = useState<string>(stateToDo?.text ?? "");
   const [stateCategory, setStateCategory] =
     useState<ToDoCategoryType>(category);
@@ -84,6 +98,13 @@ export function ToDo(props: ToDoData) {
     [id, text, stateToDo, setStateToDo],
   );
 
+  const removeToDoHandler = useCallback(() => {
+    const toDoList = [...(stateToDoList ?? [])].filter(
+      (toDo) => toDo.id !== id,
+    );
+    setStateToDoList(toDoList);
+  }, [id, stateToDoList, setStateToDoList]);
+
   const pureCategories = stateCategories.filter(
     (stateCategory) => stateCategory !== "All",
   );
@@ -97,7 +118,7 @@ export function ToDo(props: ToDoData) {
       >
         {text}
       </ToDoText>
-      <ChangeCategoryButtons>
+      <ButtonControls>
         {pureCategories
           .filter((pureCategory) => pureCategory !== stateCategory)
           .map((otherPureCategory) => {
@@ -111,7 +132,8 @@ export function ToDo(props: ToDoData) {
               </ChangeCategoryButton>
             );
           })}
-      </ChangeCategoryButtons>
+        <RemoveToDoButton onClick={removeToDoHandler} color="red" />
+      </ButtonControls>
     </ToDoBase>
   );
 }

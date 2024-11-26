@@ -32,29 +32,42 @@ const SelectBase = styled(AntdSelect)`
     padding: 0;
   }
 
-  && .ant-select-selection-placeholder {
-    padding: 1px 36px 1px 5px;
+  &&&&& .ant-select-selection-search-input,
+  && .ant-select-selection-placeholder,
+  && .ant-select-selection-item {
+    padding: 1px 35px 1px 5px;
 
     font-size: 17px;
     font-family: "Source Sans 3";
-    color: #999;
+    color: #333;
     font-weight: normal;
   }
 
-  &&&&& .ant-select-selection-search-input {
-    padding: 1px 18px 1px 5px;
-
-    font-size: 17px;
-    font-family: "Source Sans 3";
-    color: #333;
+  && .ant-select-selection-placeholder,
+  && .ant-select-selection-item {
+    line-height: 28px;
   }
 
-  && .ant-select-selection-item {
-    padding: 1px 18px 1px 5px;
+  && .ant-select-selection-placeholder {
+    color: #999;
+  }
 
-    font-size: 17px;
-    font-family: "Source Sans 3";
-    color: #333;
+  && .ant-select-selection-wrap::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35px;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    background-color: dodgerblue;
+    cursor: pointer;
+  }
+
+  && .ant-select-arrow {
+    z-index: 10;
+    color: #d2e8ff;
   }
 `;
 
@@ -86,9 +99,18 @@ export const Select = React.memo(
     ({ customProps, ...otherProps }, ref) => {
       const refBase = useRef<RefSelectProps>();
 
+      const defaultValue = customProps?.selectProps?.defaultValue;
+      console.log("defaultValue:", defaultValue);
+
       const [stateSelectedValue, setStateSelectedValue] = useState<
         string | undefined
-      >(undefined);
+      >(
+        typeof defaultValue === "string"
+          ? defaultValue
+          : typeof defaultValue === "number"
+            ? defaultValue.toString()
+            : undefined,
+      );
 
       useImperativeHandle(ref, () => {
         if (refBase.current) {
@@ -175,6 +197,7 @@ export const Select = React.memo(
           onChange: _onChange,
           onSelect: _onSelect,
           onSearch: _onSearch,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           optionRender: (oriOption, info) => {
             return <SelectOption>{oriOption.label}</SelectOption>;
           },

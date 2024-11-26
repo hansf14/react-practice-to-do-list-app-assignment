@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useRecoilState } from "recoil";
-import { atomCategories, atomToDos } from "@/atoms";
+import { atomFamilyCategories, atomFamilyToDos } from "@/atoms";
 import { styled } from "styled-components";
 import { PencilSquare, XCircle } from "react-bootstrap-icons";
 
@@ -16,18 +16,24 @@ const CategoryText = styled.span`
 
 const CategoryEditButton = styled(PencilSquare)`
   flex: 0 0 25px;
+  height: 25px;
+  cursor: pointer;
 `;
 
 const CategoryRemoveButton = styled(XCircle)`
   flex: 0 0 25px;
+  height: 25px;
+  cursor: pointer;
 `;
 
 const defaultEditButtonColor = "yellow";
 const editableStateEditButtonColor = "aquamarine";
 
 export function Category({ text, ...otherProps }: { text: string }) {
-  const [stateCategories, setStateCategories] = useRecoilState(atomCategories);
-  const [stateToDos, setStateToDos] = useRecoilState(atomToDos);
+  const [stateCategories, setStateCategories] = useRecoilState(
+    atomFamilyCategories(null),
+  );
+  const [stateToDos, setStateToDos] = useRecoilState(atomFamilyToDos(null));
 
   const [stateCategoryTextTmp, setStateCategoryTextTmp] = useState(text);
   const [stateCategoryText, setStateCategoryText] = useState(text);
