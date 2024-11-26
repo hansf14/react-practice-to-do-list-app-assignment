@@ -24,16 +24,10 @@
       "last 1 safari version"
     ]
   },
-  "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
-  },
   "dependencies": {
     "antd": "^5.22.2",
-    "apexcharts": "^3.48.0",
-    "date-fns": "^3.6.0",
     "lodash-es": "^4.17.21",
     "react": "^18.3.1",
-    "react-apexcharts": "^1.4.1",
     "react-bootstrap-icons": "^1.11.4",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.4",
@@ -46,8 +40,7 @@
     "styled-reset": "^4.3.4",
     "usehooks-ts": "^3.1.0",
     "uuid": "^10.0.0",
-    "web-vitals": "^1.1.2",
-    "yarn": "^1.22.22"
+    "web-vitals": "^1.1.2"
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
