@@ -9,7 +9,7 @@
     "build": "craco --openssl-legacy-provider build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
+    "predeploy": "yarn build",
     "deploy": "gh-pages-clean && gh-pages -d ./build"
   },
   "browserslist": {
