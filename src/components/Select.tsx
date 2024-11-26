@@ -159,7 +159,7 @@ export const Select = React.memo(
 
       const _onSelect = useCallback<NonNullable<AntdSelectProps["onSelect"]>>(
         (value: string, option) => {
-          console.log(`onSelect: "${value}"`);
+          // console.log(`onSelect: "${value}"`);
           onSelect(value, option);
           setStateSelectedValue(value);
         },

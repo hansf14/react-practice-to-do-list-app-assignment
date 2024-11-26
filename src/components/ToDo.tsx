@@ -4,7 +4,6 @@ import {
   atomFamilyCategories,
   selectorFamilyToDo,
   selectorFamilyToDoList,
-  ToDoCategoryType,
   ToDoData,
 } from "@/atoms";
 import { styled } from "styled-components";
@@ -59,8 +58,6 @@ export function ToDo(props: ToDoData) {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [stateText, setStateText] = useState<string>(stateToDo?.text ?? "");
-  const [stateCategory, setStateCategory] =
-    useState<ToDoCategoryType>(category);
 
   const applyEditToDoTextHandler = useCallback<
     React.FocusEventHandler<HTMLDivElement>
@@ -89,7 +86,6 @@ export function ToDo(props: ToDoData) {
       //   ...(stateToDo ?? { id, text }),
       //   category: newCategory,
       // });
-      setStateCategory(newCategory);
       setStateToDo({
         ...(stateToDo ?? { id, text }),
         category: newCategory,
@@ -108,6 +104,8 @@ export function ToDo(props: ToDoData) {
   const pureCategories = stateCategories.filter(
     (stateCategory) => stateCategory !== "All",
   );
+  // console.log("stateCategories:", stateCategories);
+  // console.log("props:", props);
 
   return (
     <ToDoBase>
@@ -120,7 +118,7 @@ export function ToDo(props: ToDoData) {
       </ToDoText>
       <ButtonControls>
         {pureCategories
-          .filter((pureCategory) => pureCategory !== stateCategory)
+          .filter((pureCategory) => pureCategory !== category)
           .map((otherPureCategory) => {
             return (
               <ChangeCategoryButton

@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
-import { atomFamilyCategories, atomFamilyToDos } from "@/atoms";
+import { atomFamilyCategories, atomFamilyToDos, ToDoData } from "@/atoms";
 import { styled } from "styled-components";
 import { PencilSquare, XCircle } from "react-bootstrap-icons";
 
@@ -29,7 +29,7 @@ const CategoryRemoveButton = styled(XCircle)`
 const defaultEditButtonColor = "yellow";
 const applyEditEditButtonColor = "aquamarine";
 
-export function Category({ text, ...otherProps }: { text: string }) {
+export function Category({ text }: { text: string }) {
   const [stateCategories, setStateCategories] = useRecoilState(
     atomFamilyCategories(null),
   );
@@ -87,17 +87,22 @@ export function Category({ text, ...otherProps }: { text: string }) {
 
       setStateToDos((cur) => {
         const toDos = { ...cur };
-        const newCategoryToDoList = [
+        const newCategoryToDoList: ToDoData[] = [
           ...(toDos[beforeEditApplyCategoryText] ?? []),
-        ];
-        delete toDos[beforeEditApplyCategoryText];
-        console.log("toDoList:", newCategoryToDoList);
-        console.log("toDos:", toDos);
-
-        console.log({
-          ...toDos,
-          [afterEditApplyCategoryText]: newCategoryToDoList,
+        ].map((toDo) => {
+          return {
+            id: toDo.id,
+            category: afterEditApplyCategoryText,
+            text: toDo.text,
+          };
         });
+        delete toDos[beforeEditApplyCategoryText];
+        // console.log("toDoList:", newCategoryToDoList);
+        // console.log("toDos:", toDos);
+        // console.log({
+        //   ...toDos,
+        //   [afterEditApplyCategoryText]: newCategoryToDoList,
+        // });
         return {
           ...toDos,
           [afterEditApplyCategoryText]: newCategoryToDoList,
@@ -151,7 +156,7 @@ export function Category({ text, ...otherProps }: { text: string }) {
   // console.log(stateCategories);
 
   return (
-    <CategoryBase {...otherProps}>
+    <CategoryBase>
       <CategoryText
         ref={refCategoryText}
         contentEditable={stateIsEditing}
