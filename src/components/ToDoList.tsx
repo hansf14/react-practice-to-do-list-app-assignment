@@ -40,6 +40,7 @@ const ToDos = styled.ul`
 
 const ToDoListHintEmpty = styled.div`
   width: 100%;
+  max-width: 400px;
   height: 200px;
   background-color: aliceblue;
   display: flex;
@@ -68,12 +69,11 @@ export function ToDoList() {
     [setStateCurrentCategory],
   );
 
-  const pureCategories = stateCategories.filter(
-    (stateCategory) => stateCategory !== "All",
-  );
-
-  console.log(`${stateCurrentCategory}:`, stateSpecificCategoryToDoList);
-  console.log(pureCategories);
+  // const pureCategories = stateCategories.filter(
+  //   (stateCategory) => stateCategory !== "All",
+  // );
+  // console.log(`${stateCurrentCategory}:`, stateSpecificCategoryToDoList);
+  // console.log(pureCategories);
 
   const toDos =
     stateCurrentCategory === "All"

@@ -24,6 +24,11 @@ const SelectBase = styled(AntdSelect)`
 
   &&.ant-select-disabled {
     background-color: #ddd;
+
+    .ant-select-selection-wrap::before {
+      cursor: not-allowed;
+      background-color: #bbb;
+    }
   }
 
   && .ant-select-selector {
@@ -100,7 +105,7 @@ export const Select = React.memo(
       const refBase = useRef<RefSelectProps>();
 
       const defaultValue = customProps?.selectProps?.defaultValue;
-      console.log("defaultValue:", defaultValue);
+      // console.log("defaultValue:", defaultValue);
 
       const [stateSelectedValue, setStateSelectedValue] = useState<
         string | undefined

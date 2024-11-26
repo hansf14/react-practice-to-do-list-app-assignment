@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { atomFamilyCategories, atomFamilyToDos } from "@/atoms";
 import { styled } from "styled-components";
@@ -27,78 +27,90 @@ const CategoryRemoveButton = styled(XCircle)`
 `;
 
 const defaultEditButtonColor = "yellow";
-const editableStateEditButtonColor = "aquamarine";
+const applyEditEditButtonColor = "aquamarine";
 
 export function Category({ text, ...otherProps }: { text: string }) {
   const [stateCategories, setStateCategories] = useRecoilState(
     atomFamilyCategories(null),
   );
   const [stateToDos, setStateToDos] = useRecoilState(atomFamilyToDos(null));
-
-  const [stateCategoryTextTmp, setStateCategoryTextTmp] = useState(text);
   const [stateCategoryText, setStateCategoryText] = useState(text);
 
-  const [stateIsEditable, setStateIsEditable] = useState(false);
+  const refCategoryText = useRef<HTMLSpanElement>(null);
+  const [stateIsEditing, setStateIsEditing] = useState(false);
   const [stateEditButtonColor, setStateEditButtonColor] = useState(
     defaultEditButtonColor,
   );
 
-  const startEditCategoryText = useCallback<
+  const startOrEndEditCategoryText = useCallback<
     React.MouseEventHandler<SVGElement>
   >(() => {
     // `All` category shouldn't be renamed.
-    if (stateCategoryText === "All") {
+    if (stateCategoryText === "All" || !refCategoryText.current) {
       return;
     }
 
-    const beforeEditCategory = stateCategoryText;
-    const afterEditCategory = stateCategoryTextTmp.trim();
-    if (stateIsEditable) {
+    setStateIsEditing((cur) => !cur);
+    if (!stateIsEditing) {
+      setStateEditButtonColor(applyEditEditButtonColor);
+    } else {
+      setStateEditButtonColor(defaultEditButtonColor);
+
+      // Apply edit
+      const currentEditStateCategoryText = refCategoryText.current.textContent;
+      if (!currentEditStateCategoryText) {
+        return;
+      }
+
+      const beforeEditApplyCategoryText = stateCategoryText;
+      const afterEditApplyCategoryText = currentEditStateCategoryText.trim();
       const targetIdx = stateCategories.findIndex(
-        (stateCategory) => stateCategory === beforeEditCategory,
+        (stateCategory) => stateCategory === beforeEditApplyCategoryText,
       );
       const doesNewCategoryNameAlreadyExist =
         stateCategories.findIndex(
-          (stateCategory) => stateCategory === afterEditCategory,
+          (stateCategory) => stateCategory === afterEditApplyCategoryText,
         ) !== -1;
-      if (!doesNewCategoryNameAlreadyExist) {
-        setStateCategoryText(afterEditCategory);
-        const categories = [...stateCategories];
-        categories.splice(targetIdx, 1, afterEditCategory);
-        setStateCategories(categories);
 
-        setStateToDos((cur) => {
-          const newValue = { ...cur };
-          const newCategory = [...(newValue[beforeEditCategory] ?? [])];
-          delete newValue[beforeEditCategory];
-          return {
-            ...newValue,
-            afterEditCategory: newCategory,
-          };
-        });
-      } else {
-        alert(`The category named "${afterEditCategory}" already exists.`);
-        setStateCategoryTextTmp(stateCategoryText);
+      if (doesNewCategoryNameAlreadyExist) {
+        alert(
+          `The category named "${afterEditApplyCategoryText}" already exists.`,
+        );
+        refCategoryText.current.textContent = beforeEditApplyCategoryText;
+        return;
       }
-      setStateEditButtonColor(defaultEditButtonColor);
-    } else {
-      setStateEditButtonColor(editableStateEditButtonColor);
+
+      setStateCategoryText(afterEditApplyCategoryText);
+      const categories = [...stateCategories];
+      categories.splice(targetIdx, 1, afterEditApplyCategoryText);
+      setStateCategories(categories);
+
+      setStateToDos((cur) => {
+        const toDos = { ...cur };
+        const newCategoryToDoList = [
+          ...(toDos[beforeEditApplyCategoryText] ?? []),
+        ];
+        delete toDos[beforeEditApplyCategoryText];
+        console.log("toDoList:", newCategoryToDoList);
+        console.log("toDos:", toDos);
+
+        console.log({
+          ...toDos,
+          [afterEditApplyCategoryText]: newCategoryToDoList,
+        });
+        return {
+          ...toDos,
+          [afterEditApplyCategoryText]: newCategoryToDoList,
+        };
+      });
     }
-    setStateIsEditable((cur) => !cur);
   }, [
-    stateIsEditable,
-    stateCategoryTextTmp,
-    setStateCategories,
-    stateCategories,
+    stateIsEditing,
     stateCategoryText,
+    stateCategories,
+    setStateCategories,
     setStateToDos,
   ]);
-
-  const applyEditCategoryText = useCallback<
-    React.FormEventHandler<HTMLSpanElement>
-  >((event) => {
-    setStateCategoryTextTmp(event.currentTarget.textContent ?? "");
-  }, []);
 
   const removeCategoryText = useCallback(() => {
     const result = confirm("Are you sure want to remove this category?");
@@ -107,7 +119,7 @@ export function Category({ text, ...otherProps }: { text: string }) {
     }
 
     if ((stateToDos[stateCategoryText] ?? []).length !== 0) {
-      alert("Category must be empty to be removed.");
+      alert("There shouldn't remain to-dos of the category to be removed.");
       return;
     }
 
@@ -122,9 +134,9 @@ export function Category({ text, ...otherProps }: { text: string }) {
     setStateCategories(categories);
 
     setStateToDos((cur) => {
-      const newValue = { ...cur };
-      delete newValue[stateCategoryText];
-      return newValue;
+      const newToDos = { ...cur };
+      delete newToDos[stateCategoryText];
+      return newToDos;
     });
   }, [
     setStateCategories,
@@ -141,16 +153,16 @@ export function Category({ text, ...otherProps }: { text: string }) {
   return (
     <CategoryBase {...otherProps}>
       <CategoryText
-        contentEditable={stateIsEditable}
+        ref={refCategoryText}
+        contentEditable={stateIsEditing}
         suppressContentEditableWarning
-        onBlur={applyEditCategoryText}
       >
         {text}
       </CategoryText>
       {stateCategoryText !== "All" && (
         <>
           <CategoryEditButton
-            onClick={startEditCategoryText}
+            onClick={startOrEndEditCategoryText}
             color={stateEditButtonColor}
           />
           <CategoryRemoveButton onClick={removeCategoryText} color="red" />

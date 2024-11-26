@@ -30,7 +30,7 @@ const ToDoAdderCategorySelector = styled(Select)`
 
 const ToDoAdderTextInput = styled.textarea`
   height: 80px;
-  width: min(460px, 100%);
+  width: min(400px, 100%);
   padding: calc(1px + 1px) 5px;
   border: none;
   border-radius: 0;
@@ -47,6 +47,7 @@ const ToDoAdderTextInput = styled.textarea`
     background-color: #ddd;
     color: #999;
     cursor: not-allowed;
+    resize: none;
   }
 `;
 
@@ -122,7 +123,7 @@ export function ToDoAdder() {
   );
 
   useEffect(() => {
-    console.log(refToDoAdderCategorySelector.current?.selectedValue);
+    // console.log(refToDoAdderCategorySelector.current?.selectedValue);
     if (
       refToDoAdderCategorySelector.current?.selectedValue &&
       !pureCategories.includes(

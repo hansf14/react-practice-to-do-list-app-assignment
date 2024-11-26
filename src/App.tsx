@@ -1,6 +1,6 @@
 import { createGlobalStyle, styled } from "styled-components";
 import { Helmet } from "react-helmet-async";
-import { ReactQueryDevtools } from "react-query/devtools";
+// import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
 import { defaultTheme } from "./theme";
 import { ToDoList } from "./components/ToDoList";
@@ -107,7 +107,7 @@ function App() {
           <HorizontalDivider />
           <ToDoList />
         </Main>
-        <ReactQueryDevtools initialIsOpen={true} />
+        {/* <ReactQueryDevtools initialIsOpen={true} /> */}
       </ThemeProvider>
     </>
   );
