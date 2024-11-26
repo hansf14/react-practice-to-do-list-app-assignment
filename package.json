@@ -41,6 +41,7 @@
     "react-query": "^3.27.0",
     "react-router-dom": "^5.3.0",
     "recoil": "^0.7.7",
+    "recoil-persist": "^5.1.0",
     "styled-components": "^6.1.13",
     "styled-reset": "^4.3.4",
     "usehooks-ts": "^3.1.0",

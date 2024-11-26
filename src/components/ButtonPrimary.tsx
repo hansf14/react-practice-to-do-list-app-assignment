@@ -7,4 +7,11 @@ export const ButtonPrimary = styled.button`
   border-radius: 0;
   background-color: dodgerblue;
   color: #d2e8ff;
+  cursor: pointer;
+
+  &[disabled] {
+    background-color: #ddd;
+    color: #999;
+    cursor: not-allowed;
+  }
 `;

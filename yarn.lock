@@ -12891,6 +12891,7 @@ __metadata:
     react-router-dom: "npm:^5.3.0"
     react-scripts: "npm:5.0.1"
     recoil: "npm:^0.7.7"
+    recoil-persist: "npm:^5.1.0"
     styled-components: "npm:^6.1.13"
     styled-reset: "npm:^4.3.4"
     tsconfig-paths-webpack-plugin: "npm:^4.1.0"
@@ -13080,6 +13081,15 @@ __metadata:
   dependencies:
     picomatch: "npm:^2.2.1"
   checksum: 10c0/6fa848cf63d1b82ab4e985f4cf72bd55b7dcfd8e0a376905804e48c3634b7e749170940ba77b32804d5fe93b3cc521aa95a8d7e7d725f830da6d93f3669ce66b
+  languageName: node
+  linkType: hard
+
+"recoil-persist@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "recoil-persist@npm:5.1.0"
+  peerDependencies:
+    recoil: ^0.7.2
+  checksum: 10c0/76cf9c0a41511d50d5f7b5b8feaf5d1df275617aa9c4980a8517a1f364a83df63ac159d002e1da8d5dba402b138cb38cc196c44b010ebf3f5b4943945d008687
   languageName: node
   linkType: hard
 

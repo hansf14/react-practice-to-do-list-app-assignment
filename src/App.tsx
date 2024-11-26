@@ -2,7 +2,7 @@ import { createGlobalStyle, styled } from "styled-components";
 import { Helmet } from "react-helmet-async";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
-import { darkTheme } from "./theme";
+import { defaultTheme } from "./theme";
 import { ToDoList } from "./components/ToDoList";
 import { CategoryList } from "@/components/CategoryList";
 import { CategoryAdder } from "@/components/CategoryAdder";
@@ -90,7 +90,7 @@ const Main = styled.main`
 function App() {
   return (
     <>
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={defaultTheme}>
         <Helmet>
           <link
             href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"

@@ -23,7 +23,7 @@ const CategoryListContentBase = styled.ul`
 
 export function CategoryList() {
   const stateCategories = useRecoilValue(atomCategories);
-  console.log(stateCategories);
+  // console.log(stateCategories);
 
   return (
     <CategoryListBase>

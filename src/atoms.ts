@@ -1,11 +1,12 @@
 import { createKeyValueMapping } from "@/utils";
 import {
   atom,
-  atomFamily,
-  DefaultValue,
+  // atomFamily,
+  // DefaultValue,
   selector,
   selectorFamily,
 } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
 export const ToDoDefaultCategoryTypes = ["To Do", "Doing", "Done"] as const;
 export type ToDoDefaultCategoryType = (typeof ToDoDefaultCategoryTypes)[number];
@@ -35,28 +36,17 @@ export interface ToDosData {
   [category: ToDoCategoryType]: ToDoData[] | undefined;
 }
 
-export const atomFamilyToDo = atomFamily<ToDoData, ToDoData["id"]>({
-  key: "atom-family-to-do",
-  default: (id) => ({
-    id,
-    category: "To Do",
-    text: "",
-  }),
-});
+export interface ToDoQueryParams {
+  id: ToDoData["id"];
+  category: ToDoCategoryType;
+  [_: string]: string;
+}
 
-// export const selectorFamilyToDo = selectorFamily<ToDoData, ToDoData["id"]>({
-// 	key: "selector-family-to-do",
-// 	get:
-// 		(id) =>
-// 		({ get }) => {
-// 			return get(atomFamilyToDo(id));
-// 		},
-// 	set:
-// 		(id) =>
-// 		({ set }, newValue) => {
-// 			set(atomFamilyToDo(id), newValue);
-// 		},
-// });
+const { persistAtom } = recoilPersist({
+  key: "recoil-persist", // this key is using to store data in local storage
+  storage: localStorage, // configure which storage will be used to store the data
+  converter: JSON, // configure how values will be serialized/deserialized in storage
+});
 
 export const atomCategories = atom<ToDoCategoryType[]>({
   key: "atom-categories",
@@ -73,83 +63,14 @@ export const atomToDoAdderCurrentCategory = atom<ToDoCategoryType | undefined>({
       )[0];
     },
   }),
-  // set: ({}, newValue) => {},
 });
 
 export const atomToDoDisplayCurrentCategory = atom<
   ToDoCategoryType | undefined
 >({
   key: "atom-to-do-display-current-category",
-  default: selector({
-    key: "atom-to-do-display-current-category/default",
-    get: ({ get }) => {
-      return get(atomCategories).find(
-        (stateCategory) => stateCategory === "All",
-      );
-    },
-  }),
-  // set: ({}, newValue) => {},
+  default: "All",
 });
-
-// export const atomToDoAdderCurrentCategory = atom<
-//   ToDoCategoryType | undefined
-// >({
-//   key: "atom-to-do-adder-current-category",
-//   default: ({ get }) => {
-//     return get(atomCategories).filter(
-//       (stateCategory) => stateCategory !== "All",
-//     )[0];
-//   },
-//   set: ({}, newValue) => {},
-// });
-
-// export const selectorToDoAdderCurrentCategory = selector<
-//   ToDoCategoryType | undefined
-// >({
-//   key: "atom-to-do-adder-current-category",
-//   get: ({ get }) => {
-//     return get(atomCategories).filter(
-//       (stateCategory) => stateCategory !== "All",
-//     )[0];
-//   },
-//   set: ({}, newValue) => {},
-// });
-
-// export const selectorToDoAdderCurrentCategory = selector<
-//   ToDoCategoryType | undefined
-// >({
-//   key: "atom-to-do-adder-current-category",
-//   get: ({ get }) => {
-//     return get(atomCategories).filter(
-//       (stateCategory) => stateCategory !== "All",
-//     )[0];
-//   },
-//   // set: ({}, newValue) => {},
-// });
-
-// export const selectorToDoAdderCurrentCategory = selector<
-//   ToDoCategoryType | undefined
-// >({
-//   key: "atom-to-do-adder-current-category",
-//   get: ({ get }) => {
-//     return get(atomCategories).filter(
-//       (stateCategory) => stateCategory !== "All",
-//     )[0];
-//   },
-//   set: ({}, newValue) => {
-//     return newValue;
-//   },
-// });
-
-// export const selectorCategories = selector<ToDoCategoryType[]>({
-// 	key: "selector-categories",
-// 	get: ({ get }) => {
-// 		return get(atomCategories);
-// 	},
-// 	set: ({set}, newValue) => {
-// 		return {}
-// 	}
-// });
 
 export const atomToDos = atom<ToDosData>({
   key: "atom-to-dos",
@@ -159,44 +80,106 @@ export const atomToDos = atom<ToDosData>({
     Doing: [],
     Done: [],
   },
+  effects_UNSTABLE: [persistAtom],
 });
 
-// export const selectorFamilyToDoList = selectorFamily<
-//   ToDoData[] | undefined,
-//   ToDoCategoryType
-// >({
-//   key: "selector-family-to-do-list",
-//   get:
-//     (category) =>
-//     ({ get }) => {
-//       return get(atomToDos)[category];
-//     },
-//   set:
-//     (category) =>
-//     ({ set, get }, newValue) => {
-//       set(atomToDos, {
-//         ...get(atomToDos),
-//         [category]: newValue instanceof DefaultValue ? [] : newValue,
-//       });
-//     },
-// });
+export const selectorFamilyToDoList = selectorFamily<
+  ToDoData[] | undefined,
+  ToDoCategoryType
+>({
+  key: "selector-family-to-do-list",
+  get:
+    (category) =>
+    ({ get }) => {
+      return get(atomToDos)[category];
+    },
+  set:
+    (category) =>
+    ({ set, get }, newValue) => {
+      // console.log(atomToDos, {
+      //   ...get(atomToDos),
+      //   [category]: newValue as ToDoData[],
+      //   // [category]: newValue instanceof DefaultValue ? [] : newValue,
+      // });
+      set(atomToDos, {
+        ...get(atomToDos),
+        [category]: newValue as ToDoData[],
+        // [category]: newValue instanceof DefaultValue ? [] : newValue,
+      });
+    },
+});
 
-// export const selectorFamilyToDos = selectorFamily<ToDosData, ToDoCategoryType>({
-// 	key: "selector-family-to-dos",
-// 	get:
-// 		(category) =>
-// 		({ get }) => {
-// 			const specificCategoryToDoList = get(atomToDos)[category];
-// 			return specificCategoryToDoList;
-// 		},
-// 	set:
-// 		(category) =>
-// 		({ set, get }, newValue) => {
-// 			const ToDosData = get(atomToDos);
-// 			const newToDosData = {
-// 				...ToDosData,
-// 				[category]: newValue instanceof DefaultValue ? [] : newValue,
-// 			};
-// 			set(atomToDos, newToDosData);
-// 		},
-// });
+export const selectorAllToDos = selector<ToDoData[]>({
+  key: "selector-all-to-dos",
+  get: ({ get }) => {
+    const categories = get(atomCategories);
+    const allToDos: ToDoData[] = [];
+    categories.forEach((category) => {
+      allToDos.push(...(get(selectorFamilyToDoList(category)) ?? []));
+    });
+    return allToDos;
+  },
+});
+
+export const selectorFamilyToDo = selectorFamily<
+  ToDoData | undefined,
+  ToDoQueryParams
+>({
+  key: "selector-family-to-do",
+  get:
+    ({ category, id }) =>
+    ({ get }) => {
+      const toDoList = get(selectorFamilyToDoList(category)) ?? [];
+      return toDoList.find((toDo) => toDo.id === id);
+    },
+  set:
+    ({ category, id }) =>
+    ({ set, get }, newValue) => {
+      if (newValue === undefined) {
+        return;
+      }
+
+      const toDoList = get(selectorFamilyToDoList(category));
+      if (toDoList === undefined) {
+        return;
+      }
+      const targetIdx = toDoList.findIndex((toDo) => toDo.id === id);
+      if (targetIdx === -1) {
+        return;
+      }
+
+      const updatedToDo = newValue as ToDoData;
+      if (category === updatedToDo.category) {
+        const newToDoList = [...toDoList];
+        newToDoList[targetIdx] = updatedToDo;
+        set(selectorFamilyToDoList(category), newToDoList);
+      } else {
+        const updatedOldCategoryToDoList = toDoList.filter(
+          (_, idx) => idx !== targetIdx,
+        );
+        // console.log("updatedOldCategoryToDoList:", updatedOldCategoryToDoList);
+        // set(selectorFamilyToDoList(category), updatedOldCategoryToDoList);
+        // A -> B
+
+        const newCategoryToDoList =
+          get(selectorFamilyToDoList(updatedToDo.category)) ?? [];
+        const updatedNewCategoryToDoList = [
+          updatedToDo,
+          ...newCategoryToDoList,
+        ];
+        // console.log("updatedNewCategoryToDoList:", updatedNewCategoryToDoList);
+        // set(
+        //   selectorFamilyToDoList(updatedToDo.category),
+        //   updatedNewCategoryToDoList,
+        // );
+        // It should be B -> C but actually this goes A -> C
+
+        // Fix: A -> C
+        set(atomToDos, {
+          ...get(atomToDos),
+          [category]: updatedOldCategoryToDoList,
+          [updatedToDo.category]: updatedNewCategoryToDoList,
+        });
+      }
+    },
+});

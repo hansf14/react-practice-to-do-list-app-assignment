@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -9,13 +9,9 @@ import {
 } from "@/atoms";
 import { generateUniqueRandomId } from "@/utils";
 import { styled } from "styled-components";
-import { Select } from "@/components/Select";
+import { Select, SelectHandle, SelectProps } from "@/components/Select";
 import { ButtonPrimary } from "@/components/ButtonPrimary";
-// import DropdownMenu, {
-//   DropdownMenuBody,
-//   DropdownMenuHead,
-//   DropdownMenuOption,
-// } from "@/components/DropdownMenu";
+import { RequiredDeep } from "@/utils/typescriptUtils";
 
 export interface ToDoFormData {
   toDoText: string;
@@ -30,48 +26,6 @@ const ToDoAdderBase = styled.form`
 
 const ToDoAdderCategorySelector = styled(Select)`
   width: 180px;
-
-  font-family: "Source Sans 3";
-  color: #333;
-
-  &&.ant-select {
-    height: 30px;
-  }
-
-  &&.ant-select-disabled {
-    background-color: #ddd;
-  }
-
-  && .ant-select-selector {
-    border: none;
-    border-radius: 0;
-    padding: 0;
-  }
-
-  && .ant-select-selection-placeholder {
-    padding: 1px 36px 1px 5px;
-
-    font-size: 17px;
-    font-family: "Source Sans 3";
-    color: #999;
-    font-weight: normal;
-  }
-
-  &&&&& .ant-select-selection-search-input {
-    padding: 1px 18px 1px 5px;
-
-    font-size: 17px;
-    font-family: "Source Sans 3";
-    color: #333;
-  }
-
-  && .ant-select-selection-item {
-    padding: 1px 18px 1px 5px;
-
-    font-size: 17px;
-    font-family: "Source Sans 3";
-    color: #333;
-  }
 `;
 
 const ToDoAdderTextInput = styled.textarea`
@@ -80,7 +34,6 @@ const ToDoAdderTextInput = styled.textarea`
   padding: calc(1px + 1px) 5px;
   border: none;
   border-radius: 0;
-  /* resize: none; */
 
   font-size: 17px;
   font-family: "Source Sans 3";
@@ -89,29 +42,34 @@ const ToDoAdderTextInput = styled.textarea`
   &::placeholder {
     color: #999;
   }
+
+  &[disabled] {
+    background-color: #ddd;
+    color: #999;
+    cursor: not-allowed;
+  }
 `;
 
-const ToDoAdderAddButton = styled(ButtonPrimary)`
-  width: "fit-content";
+const ToDoAdderErrorMessage = styled.div`
+  padding-left: 5px;
+  color: red;
 `;
 
 export function ToDoAdder() {
+  const refToDoAdderCategorySelector = useRef<SelectHandle>(null);
+
   const stateCategories = useRecoilValue(atomCategories);
   const setStateToDos = useSetRecoilState(atomToDos);
-
-  // const [stateCurrentCategory, setStateCurrentCategory] =
-  //   useState<ToDoCategoryType>(() => {
-  //     return stateCategories.filter(
-  //       (stateCategory) => stateCategory !== "All",
-  //     )[0];
-  //   });
-  // console.log(stateCurrentCategory);
-  // const stateCurrentCategory = useRecoilValue(selectorToDoAdderCurrentCategory);
   const [stateCurrentCategory, setStateCurrentCategory] = useRecoilState(
     atomToDoAdderCurrentCategory,
   );
 
-  const { register, handleSubmit, reset } = useForm<ToDoFormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ToDoFormData>({
     defaultValues: {
       toDoText: "",
     },
@@ -148,49 +106,77 @@ export function ToDoAdder() {
     return handleSubmit(onValid);
   }, [handleSubmit, onValid]);
 
-  const selectCategoryHandler: React.FormEventHandler<HTMLSelectElement> =
-    useCallback(
-      (event) => {
-        setStateCurrentCategory(event.currentTarget.value);
-      },
-      [setStateCurrentCategory],
-    );
+  const selectCategoryHandler = useCallback<
+    RequiredDeep<SelectProps>["customProps"]["selectProps"]["onChange"]
+  >(
+    (value: string, option) => {
+      setStateCurrentCategory(value);
+    },
+    [setStateCurrentCategory],
+  );
 
-  const categories = stateCategories.filter(
+  const pureCategories = stateCategories.filter(
     (stateCategory) => stateCategory !== "All",
   );
 
-  console.log(categories);
+  useEffect(() => {
+    if (
+      refToDoAdderCategorySelector.current?.selectedValue &&
+      !pureCategories.includes(
+        refToDoAdderCategorySelector.current.selectedValue,
+      )
+    ) {
+      refToDoAdderCategorySelector.current.clear();
+    }
+  });
+
+  // console.log(pureCategories);
 
   return (
     <ToDoAdderBase onSubmit={submitHandler}>
       <ToDoAdderCategorySelector
+        ref={refToDoAdderCategorySelector}
         customProps={{
           selectProps: {
-            disabled: categories.length === 0,
+            disabled: pureCategories.length === 0,
             placeholder: "Select a Category",
-            options: categories.map((stateCategory) => {
+            options: pureCategories.map((pureCategory) => {
               return {
-                value: stateCategory,
-                label: stateCategory,
+                value: pureCategory,
+                label: pureCategory,
               };
             }),
+            onSelect: selectCategoryHandler,
           },
         }}
       />
       <ToDoAdderTextInput
         placeholder="New To-do"
-        disabled={stateCurrentCategory === undefined ? true : false}
+        disabled={stateCurrentCategory === undefined}
         {...register("toDoText", {
           required: "Please fill in a new to-do.",
+          validate: {
+            checkCategorySelectorNotEmpty: () => {
+              return (
+                !!refToDoAdderCategorySelector.current?.selectedValue ||
+                "Please select a category."
+              );
+            },
+          },
         })}
       />
-      <ToDoAdderAddButton
-        disabled={stateCurrentCategory === undefined ? true : false}
+      <ButtonPrimary
+        disabled={
+          stateCurrentCategory === undefined &&
+          !!refToDoAdderCategorySelector.current?.selectedValue
+        }
         type="submit"
       >
         Add
-      </ToDoAdderAddButton>
+      </ButtonPrimary>
+      <ToDoAdderErrorMessage>
+        {!!errors.toDoText?.message && errors.toDoText.message}
+      </ToDoAdderErrorMessage>
     </ToDoAdderBase>
   );
 }

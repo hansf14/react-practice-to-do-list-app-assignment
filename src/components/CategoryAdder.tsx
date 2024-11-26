@@ -11,8 +11,19 @@ export interface CategoryFormData {
 
 const CategoryAdderBase = styled.form`
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const CategoryAdderContent = styled.div`
+  display: flex;
   flex-wrap: wrap;
   gap: 10px;
+`;
+
+const CategoryAdderErrorMessage = styled.div`
+  padding-left: 5px;
+  color: red;
 `;
 
 const NewCategoryInput = styled.input`
@@ -35,7 +46,12 @@ export function CategoryAdder() {
   const [stateCategories, setStateCategories] = useRecoilState(atomCategories);
   const setStateToDos = useSetRecoilState(atomToDos);
 
-  const { register, handleSubmit, reset } = useForm<CategoryFormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CategoryFormData>({
     defaultValues: {
       categoryText: "",
     },
@@ -69,13 +85,18 @@ export function CategoryAdder() {
 
   return (
     <CategoryAdderBase onSubmit={submitHandler}>
-      <NewCategoryInput
-        placeholder="New Category"
-        {...register("categoryText", {
-          required: "Please fill in a new category.",
-        })}
-      />
-      <ButtonPrimary type="submit">Add</ButtonPrimary>
+      <CategoryAdderContent>
+        <NewCategoryInput
+          placeholder="New Category"
+          {...register("categoryText", {
+            required: "Please fill in a new category.",
+          })}
+        />
+        <ButtonPrimary type="submit">Add</ButtonPrimary>
+      </CategoryAdderContent>
+      <CategoryAdderErrorMessage>
+        {!!errors.categoryText?.message && errors.categoryText.message}
+      </CategoryAdderErrorMessage>
     </CategoryAdderBase>
   );
 }

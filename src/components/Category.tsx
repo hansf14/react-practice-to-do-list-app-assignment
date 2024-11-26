@@ -147,7 +147,7 @@ export function Category({ text, ...otherProps }: { text: string }) {
             onClick={startEditCategoryText}
             color={stateEditButtonColor}
           />
-          <CategoryRemoveButton onClick={removeCategoryText} color={"red"} />
+          <CategoryRemoveButton onClick={removeCategoryText} color="red" />
         </>
       )}
     </CategoryBase>
