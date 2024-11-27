@@ -15,11 +15,15 @@
   </div>
   <div>
     &emsp;
-    <img src="https://img.shields.io/badge/Styled Components-DB7093?style=flat&logo=styledcomponents&logoColor=white&logoWidth=25" height="25px"/>
+    <img src="https://img.shields.io/badge/styled--components-DB7093?style=flat&logo=styledcomponents&logoColor=white&logoWidth=25" height="25px"/>
   </div>
     <div>
     &emsp;
     <img src="https://img.shields.io/badge/React Hook Form-EC5990?style=flat&logo=reacthookform&logoColor=white&logoWidth=25" height="25px"/>
+  </div>
+  <div>
+    &emsp;
+    <img src="https://img.shields.io/badge/Ant Design-0170FE?style=flat&logo=antdesign&logoColor=white&logoWidth=25" height="25px"/>
   </div>
 </p>
 
