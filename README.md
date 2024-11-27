@@ -17,6 +17,10 @@
     &emsp;
     <img src="https://img.shields.io/badge/Styled Components-DB7093?style=flat&logo=styledcomponents&logoColor=white&logoWidth=25" height="25px"/>
   </div>
+    <div>
+    &emsp;
+    <img src="https://img.shields.io/badge/React Hook Form-EC5990?style=flat&logo=reacthookform&logoColor=white&logoWidth=25" height="25px"/>
+  </div>
 </p>
 
 - **Features**
@@ -33,6 +37,7 @@
     - **Supports multi-line to-do text**
   - **Persistency (refresh, reopen)**
   - **Resizable multi-line to-do text input**
+  - **Responsive design**
 - **Demo: [React Practice To-do List App Assignment](https://hansf14.github.io/react-practice-to-do-list-app-assignment)**
 - **Preview Screenshots**
 <p>
