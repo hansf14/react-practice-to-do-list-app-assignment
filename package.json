@@ -1,7 +1,7 @@
 {
-  "name": "react-practice-to-do-list-app-assignment",
+  "name": "react-practice-to-do-list-app-challenge",
   "version": "1.0.0",
-  "homepage": "https://hansf14.github.io/react-practice-to-do-list-app-assignment",
+  "homepage": "https://hansf14.github.io/react-practice-to-do-list-app-challenge",
   "private": true,
   "packageManager": "yarn@4.5.0",
   "scripts": {
