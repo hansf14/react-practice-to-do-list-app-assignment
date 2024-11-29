@@ -47,57 +47,57 @@
 <p>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-01.png" alt="react-practice-to-do-list-app-challenge-01.png" />
+    <img width="300px" src="preview-screenshots/01.png" alt="01.png" />
   </div>
   &emsp;
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-02.png" alt="react-practice-to-do-list-app-challenge-02.png" />
+    <img width="300px" src="preview-screenshots/02.png" alt="02.png" />
   </div>
   &emsp;
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-03.png" alt="react-practice-to-do-list-app-challenge-03.png" />
+    <img width="300px" src="preview-screenshots/03.png" alt="03.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-04.png" alt="react-practice-to-do-list-app-challenge-04.png" />
+    <img width="300px" src="preview-screenshots/04.png" alt="04.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-05.png" alt="react-practice-to-do-list-app-challenge-05.png" />
+    <img width="300px" src="preview-screenshots/05.png" alt="05.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-06.png" alt="react-practice-to-do-list-app-challenge-06.png" />
+    <img width="300px" src="preview-screenshots/06.png" alt="06.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-07.png" alt="react-practice-to-do-list-app-challenge-07.png" />
+    <img width="300px" src="preview-screenshots/07.png" alt="07.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-08.png" alt="react-practice-to-do-list-app-challenge-08.png" />
+    <img width="300px" src="preview-screenshots/08.png" alt="08.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-09.png" alt="react-practice-to-do-list-app-challenge-09.png" />
+    <img width="300px" src="preview-screenshots/09.png" alt="09.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-10.png" alt="react-practice-to-do-list-app-challenge-10.png" />
+    <img width="300px" src="preview-screenshots/10.png" alt="10.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-11.png" alt="react-practice-to-do-list-app-challenge-11.png" />
+    <img width="300px" src="preview-screenshots/11.png" alt="11.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-12.png" alt="react-practice-to-do-list-app-challenge-12.png" />
+    <img width="300px" src="preview-screenshots/12.png" alt="12.png" />
   </div>
   <div>
     &emsp;
-    <img width="300px" src="preview-screenshots/react-practice-to-do-list-app-challenge-13.png" alt="react-practice-to-do-list-app-challenge-13.png" />
+    <img width="300px" src="preview-screenshots/13.png" alt="13.png" />
   </div>
 </p>
 
